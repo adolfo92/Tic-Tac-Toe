@@ -48,11 +48,52 @@ function Cell() {
   return { setValue, getValue };
 }
 
-function Controller() {
+function Controller(playerOne = "Player One", playerTwo = "Player Two") {
   // Cosas inherentes a interaccion
+  const board = GameBoard();
+
+  // Funcion para seleccion de token aun sin implementacion
+  const setToken = (token) => {
+    players[0].token = token;
+
+    players[0].token === "X"
+      ? (playerTwo.token = "O")
+      : (playerTwo.token = "X");
+  };
+
+  const players = [
+    {
+      name: playerOne,
+      token: "X",
+    },
+    {
+      name: playerTwo,
+      token: "O",
+    },
+  ];
+
+  let activePlayer = players[0];
+
+  const getActivePlayer = () => activePlayer;
+
+  const switchTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const newRound = () => {
+    board.printBoard();
+    console.log(`Es el turno de ${activePlayer.name}`);
+  };
+
+  const playRound = (column, row) => {
+    board.setMark(activePlayer.token, column, row);
+    switchTurn();
+    newRound();
+  };
+
+  newRound();
+
+  return { setToken, playRound, getActivePlayer };
 }
 
-GameBoard().setMark("x", 1, 1);
-GameBoard().setMark("O", 2, 1);
-GameBoard().setMark("O", 1, 1);
-GameBoard().printBoard();
+const game = Controller();
