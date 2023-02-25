@@ -45,7 +45,6 @@ function GameBoard() {
     board.forEach((row) => {
       // Logica para columnas llenas
       const Line = row.filter((cell) => cell.getValue() === playerToken);
-
       if (Line.length === 3) {
         win = true;
       }
@@ -54,31 +53,31 @@ function GameBoard() {
     inverseBoard.forEach((row) => {
       // Logica para filas llenas
       const Line = row.filter((cell) => cell.getValue() === playerToken);
-
       if (Line.length === 3) {
         win = true;
       }
+      console.log(win);
     });
 
     // Logica para diagonales
 
     const midValue = board[1][1].getValue();
 
-    if (midValue === "") return;
-
-    // Diagonal principal
-    if (
-      board[0][0].getValue() === midValue &&
-      board[2][2].getValue() === midValue
-    ) {
-      win = true;
-    }
-    // Diagonal secundaria
-    if (
-      board[0][2].getValue() === midValue &&
-      board[2][0].getValue() === midValue
-    ) {
-      win = true;
+    if (midValue !== "") {
+      // Diagonal principal
+      if (
+        board[0][0].getValue() === midValue &&
+        board[2][2].getValue() === midValue
+      ) {
+        win = true;
+      }
+      // Diagonal secundaria
+      if (
+        board[0][2].getValue() === midValue &&
+        board[2][0].getValue() === midValue
+      ) {
+        win = true;
+      }
     }
 
     return win;
@@ -161,3 +160,4 @@ game.playRound(1, 2);
 game.playRound(0, 1);
 game.playRound(2, 2);
 game.playRound(0, 2);
+game.playRound(2, 1);
