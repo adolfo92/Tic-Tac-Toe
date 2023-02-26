@@ -137,8 +137,8 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
     console.log(`Es el turno de [${activePlayer.name}]`);
   };
 
-  const playRound = (column, row) => {
-    board.setMark(activePlayer.token, column, row);
+  const playRound = (row, column) => {
+    board.setMark(activePlayer.token, row, column);
     if (board.checkForWinning(activePlayer.token)) {
       board.printBoard();
       console.log(`Jugador [${activePlayer.name}] gano la partida`);
@@ -155,17 +155,45 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
 
 function GUI() {
   const board = document.querySelector(".board");
+  const game = Controller();
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       let button = document.createElement("button");
-      button.classList.add(`row${i}`);
-      button.classList.add(`column${j}`);
+      button.classList.add(`row-${i}`);
+      button.classList.add(`column-${j}`);
       button.classList.add("cell");
       board.appendChild(button);
     }
   }
-}
-GUI();
 
-const game = Controller();
+  const detonaCelda = (celda) => {
+    const clasesDeCelda = celda.classList;
+    const rowClass = clasesDeCelda[0];
+    const columnClass = clasesDeCelda[1];
+
+    const columnSeparator = columnClass.split("-");
+    const rowSeparator = rowClass.split("-");
+
+    const row = rowSeparator[rowSeparator.length - 1];
+    const column = columnSeparator[columnSeparator.length - 1];
+
+    const getRow = () => row;
+    const getColumn = () => column;
+
+    return { getRow, getColumn };
+  };
+
+  let celdas = document.querySelectorAll(".cell");
+
+  celdas.forEach((celda) =>
+    celda.addEventListener("click", () => {
+      game.playRound(
+        detonaCelda(celda).getRow(),
+        detonaCelda(celda).getColumn()
+      );
+    })
+  );
+}
+
+GUI();
