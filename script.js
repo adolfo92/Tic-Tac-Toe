@@ -153,11 +153,6 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
   return { setToken, playRound, getActivePlayer, getBoard: board.printBoard };
 }
 
-const game = Controller();
+function GUI() {}
 
-game.playRound(0, 0);
-game.playRound(1, 2);
-game.playRound(0, 1);
-game.playRound(2, 2);
-game.playRound(0, 2);
-game.playRound(2, 1);
+const game = Controller();
