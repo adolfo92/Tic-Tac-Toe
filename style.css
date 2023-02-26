@@ -15,3 +15,11 @@
 .row2 {
   grid-row: 3/4;
 }
+
+.cell {
+  background-color: #4d76ff;
+  border: solid black 2px;
+}
+.cell:hover {
+  background-color: #7291f7;
+}
