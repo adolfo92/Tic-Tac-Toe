@@ -153,6 +153,19 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
   return { setToken, playRound, getActivePlayer, getBoard: board.printBoard };
 }
 
-function GUI() {}
+function GUI() {
+  const board = document.querySelector(".board");
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      let button = document.createElement("button");
+      button.classList.add(`row${i}`);
+      button.classList.add(`column${j}`);
+      button.classList.add("cell");
+      board.appendChild(button);
+    }
+  }
+}
+GUI();
 
 const game = Controller();
