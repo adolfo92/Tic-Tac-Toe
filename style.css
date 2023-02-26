@@ -4,15 +4,15 @@
   grid-auto-columns: 100px;
 }
 
-.row0 {
+.row-0 {
   grid-row: 1/2;
 }
 
-.row1 {
+.row-1 {
   grid-row: 2/3;
 }
 
-.row2 {
+.row-2 {
   grid-row: 3/4;
 }
 
