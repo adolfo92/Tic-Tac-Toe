@@ -187,7 +187,9 @@ function GUI() {
     const marcaCelda = () => {
       const boardArray = game.boardArray();
       const marker = document.createElement("p");
-      marker.textContent = `${boardArray[row][column].getValue()}`;
+      const cellValue = `${boardArray[row][column].getValue()}`;
+      if (celda.textContent !== "") return;
+      marker.textContent = cellValue;
       celda.appendChild(marker);
     };
 
