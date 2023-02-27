@@ -225,11 +225,16 @@ function GUI() {
     winnerContainer.classList.add("winnerContainer");
     coverDiv.appendChild(winnerContainer);
 
+    const replayButton = document.createElement("button");
+    replayButton.classList.add("replayButton");
+    replayButton.textContent = "Volver a jugar";
+
     const textDisplay = document.createElement("p");
     textDisplay.classList.add("winnerText");
     textDisplay.textContent = `El jugador [${player}] ha ganado esta partida`;
 
     winnerContainer.appendChild(textDisplay);
+    winnerContainer.appendChild(replayButton);
   };
 
   let celdas = document.querySelectorAll(".cell");
