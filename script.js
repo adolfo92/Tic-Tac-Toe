@@ -215,11 +215,11 @@ function GUI() {
     return { getRow, getColumn, marcaCelda };
   };
   const displayWinner = (player) => {
-    const body = document.querySelector("body");
+    const wrapper = document.querySelector(".wrapper");
 
     const coverDiv = document.createElement("div");
     coverDiv.classList.add("coverDiv");
-    body.appendChild(coverDiv);
+    wrapper.appendChild(coverDiv);
 
     const winnerContainer = document.createElement("div");
     winnerContainer.classList.add("winnerContainer");
