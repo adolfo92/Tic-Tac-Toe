@@ -150,7 +150,13 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
 
   newRound();
 
-  return { setToken, playRound, getActivePlayer, getBoard: board.printBoard };
+  return {
+    setToken,
+    playRound,
+    getActivePlayer,
+    getBoard: board.printBoard,
+    boardArray: board.getBoard,
+  };
 }
 
 function GUI() {
@@ -178,10 +184,17 @@ function GUI() {
     const row = rowSeparator[rowSeparator.length - 1];
     const column = columnSeparator[columnSeparator.length - 1];
 
+    const marcaCelda = () => {
+      const boardArray = game.boardArray();
+      const marker = document.createElement("p");
+      marker.textContent = `${boardArray[row][column].getValue()}`;
+      celda.appendChild(marker);
+    };
+
     const getRow = () => row;
     const getColumn = () => column;
 
-    return { getRow, getColumn };
+    return { getRow, getColumn, marcaCelda };
   };
 
   let celdas = document.querySelectorAll(".cell");
@@ -192,6 +205,7 @@ function GUI() {
         detonaCelda(celda).getRow(),
         detonaCelda(celda).getColumn()
       );
+      detonaCelda(celda).marcaCelda();
     })
   );
 }
