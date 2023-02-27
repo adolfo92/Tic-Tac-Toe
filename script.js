@@ -137,16 +137,28 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
     console.log(`Es el turno de [${activePlayer.name}]`);
   };
 
+  let winner;
+  let getWinner = () => winner;
+
   const playRound = (row, column) => {
+    // Revisa si la casilla ya esta ocupada
     const boardArray = board.getBoard();
     const currentCellValue = boardArray[row][column].getValue();
     if (currentCellValue === "X" || currentCellValue === "O") return;
+
+    // Coloca marcador del jugador
     board.setMark(activePlayer.token, row, column);
+
+    // Revisa si hay ganador y exportalo
+
     if (board.checkForWinning(activePlayer.token)) {
       board.printBoard();
       console.log(`Jugador [${activePlayer.name}] gano la partida`);
+      winner = activePlayer;
       return;
     }
+
+    // Siguiente turno
     switchTurn();
     newRound();
   };
@@ -157,6 +169,7 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
     setToken,
     playRound,
     getActivePlayer,
+    getWinner,
     getBoard: board.printBoard,
     boardArray: board.getBoard,
   };
@@ -201,6 +214,24 @@ function GUI() {
 
     return { getRow, getColumn, marcaCelda };
   };
+  const displayWinner = (player) => {
+    const body = document.querySelector("body");
+    const coverDiv = document.createElement("div");
+    coverDiv.classList.add("coverDiv");
+
+    const winnerContainer = document.createElement("div");
+    winnerContainer.classList.add("winnerContainer");
+
+    const textDisplay = document.createElement("p");
+    textDisplay.classList.add("winnerText");
+    textDisplay.textContent = `El jugador [${player}] ha ganado esta partida`;
+
+    const fullCover = coverDiv.appendChild(
+      winnerContainer.appendChild(textDisplay)
+    );
+
+    body.appendChild(fullCover);
+  };
 
   let celdas = document.querySelectorAll(".cell");
 
@@ -211,6 +242,10 @@ function GUI() {
         detonaCelda(celda).getColumn()
       );
       detonaCelda(celda).marcaCelda();
+      if (game.getWinner()) {
+        const winner = game.getWinner();
+        displayWinner(winner.name);
+      }
     })
   );
 }
