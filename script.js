@@ -138,6 +138,9 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
   };
 
   const playRound = (row, column) => {
+    const boardArray = board.getBoard();
+    const currentCellValue = boardArray[row][column].getValue();
+    if (currentCellValue === "X" || currentCellValue === "O") return;
     board.setMark(activePlayer.token, row, column);
     if (board.checkForWinning(activePlayer.token)) {
       board.printBoard();
