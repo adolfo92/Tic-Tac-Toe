@@ -216,21 +216,20 @@ function GUI() {
   };
   const displayWinner = (player) => {
     const body = document.querySelector("body");
+
     const coverDiv = document.createElement("div");
     coverDiv.classList.add("coverDiv");
+    body.appendChild(coverDiv);
 
     const winnerContainer = document.createElement("div");
     winnerContainer.classList.add("winnerContainer");
+    coverDiv.appendChild(winnerContainer);
 
     const textDisplay = document.createElement("p");
     textDisplay.classList.add("winnerText");
     textDisplay.textContent = `El jugador [${player}] ha ganado esta partida`;
 
-    const fullCover = coverDiv.appendChild(
-      winnerContainer.appendChild(textDisplay)
-    );
-
-    body.appendChild(fullCover);
+    winnerContainer.appendChild(textDisplay);
   };
 
   let celdas = document.querySelectorAll(".cell");
