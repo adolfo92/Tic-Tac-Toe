@@ -206,6 +206,8 @@ function GUI() {
       const cellValue = `${boardArray[row][column].getValue()}`;
       if (celda.textContent !== "") return;
       marker.textContent = cellValue;
+      if (cellValue === "X") marker.style.color = "blue";
+      else marker.style.color = "#c71515";
       celda.appendChild(marker);
     };
 
@@ -256,17 +258,19 @@ function GUI() {
 }
 
 function newGame() {
-  wrapper = document.querySelector(".wrapper");
-  coverDiv = document.querySelector(".coverDiv");
-  container = document.querySelector(".container");
+  const wrapper = document.querySelector(".wrapper");
+  const coverDiv = document.querySelector(".coverDiv");
+  const container = document.querySelector(".container");
 
-  currentBoard = document.querySelector(".board");
-
-  newboard = document.createElement("div");
+  const currentBoard = document.querySelector(".board");
+  const newboard = document.createElement("div");
   newboard.classList.add("board");
+
   wrapper.removeChild(coverDiv);
   container.removeChild(currentBoard);
+
   container.appendChild(newboard);
+
   GUI();
 }
 
