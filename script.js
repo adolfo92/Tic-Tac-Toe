@@ -26,7 +26,7 @@ function GameBoard() {
       row.forEach((column) => {
         rowValues.push(column.getValue());
       });
-      console.log(rowValues);
+      // console.log(rowValues);
     });
   };
 
@@ -56,7 +56,7 @@ function GameBoard() {
       if (Line.length === 3) {
         win = true;
       }
-      console.log(win);
+      // console.log(win);
     });
 
     // Logica para diagonales
@@ -134,7 +134,7 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
 
   const newRound = () => {
     board.printBoard();
-    console.log(`Es el turno de [${activePlayer.name}]`);
+    // console.log(`Es el turno de [${activePlayer.name}]`);
   };
 
   let winner;
@@ -153,7 +153,7 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
 
     if (board.checkForWinning(activePlayer.token)) {
       board.printBoard();
-      console.log(`Jugador [${activePlayer.name}] gano la partida`);
+      // console.log(`Jugador [${activePlayer.name}] gano la partida`);
       winner = activePlayer;
       return;
     }
@@ -228,6 +228,7 @@ function GUI() {
     const replayButton = document.createElement("button");
     replayButton.classList.add("replayButton");
     replayButton.textContent = "Volver a jugar";
+    replayButton.addEventListener("click", () => newGame());
 
     const textDisplay = document.createElement("p");
     textDisplay.classList.add("winnerText");
@@ -252,6 +253,21 @@ function GUI() {
       }
     })
   );
+}
+
+function newGame() {
+  wrapper = document.querySelector(".wrapper");
+  coverDiv = document.querySelector(".coverDiv");
+  container = document.querySelector(".container");
+
+  currentBoard = document.querySelector(".board");
+
+  newboard = document.createElement("div");
+  newboard.classList.add("board");
+  wrapper.removeChild(coverDiv);
+  container.removeChild(currentBoard);
+  container.appendChild(newboard);
+  GUI();
 }
 
 GUI();
