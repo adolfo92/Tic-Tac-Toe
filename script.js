@@ -109,8 +109,8 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
     players[0].token = token;
 
     players[0].token === "X"
-      ? (playerTwo.token = "O")
-      : (playerTwo.token = "X");
+      ? (player[1].token = "O")
+      : (player[1].token = "X");
   };
 
   const players = [
@@ -203,11 +203,15 @@ function GUI() {
     const marcaCelda = () => {
       const boardArray = game.boardArray();
       const marker = document.createElement("p");
+
       const cellValue = `${boardArray[row][column].getValue()}`;
+
       if (celda.textContent !== "") return;
       marker.textContent = cellValue;
+
       if (cellValue === "X") marker.style.color = "blue";
       else marker.style.color = "#c71515";
+
       celda.appendChild(marker);
     };
 
@@ -241,14 +245,26 @@ function GUI() {
   };
 
   let celdas = document.querySelectorAll(".cell");
+  let turnDiv = document.querySelector(".turnoTexto");
+  let displayTurno = (activePlayer) => {
+    turnDiv.textContent = `Es el turno de ${activePlayer}`;
+  };
+
+  displayTurno(game.getActivePlayer().name);
 
   celdas.forEach((celda) =>
     celda.addEventListener("click", () => {
+      // Juega ronda
       game.playRound(
         detonaCelda(celda).getRow(),
         detonaCelda(celda).getColumn()
       );
+      // Marca la celda con el token
       detonaCelda(celda).marcaCelda();
+
+      // Cambia el display del jugador activo
+      displayTurno(game.getActivePlayer().name);
+      // Chequea si hay un ganador
       if (game.getWinner()) {
         const winner = game.getWinner();
         displayWinner(winner.name);

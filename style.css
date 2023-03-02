@@ -9,6 +9,8 @@ body {
 .wrapper {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   position: relative;
 }
 
@@ -47,6 +49,16 @@ body {
 }
 .cell:hover {
   background-color: #7291f7;
+}
+
+/* --------- display de turno ------*/
+
+.turno {
+  display: flex;
+  justify-content: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 /* --------- body cover ------------*/
