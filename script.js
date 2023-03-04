@@ -80,6 +80,10 @@ function GameBoard() {
       }
     }
 
+    // Tabla llena empate
+    const arrayDeTabla = board.flat();
+    if (arrayDeTabla.every((cell) => cell.getValue() !== "")) return "draw";
+
     return win;
   };
 
@@ -100,7 +104,7 @@ function Cell() {
   return { setValue, getValue };
 }
 
-function Controller(playerOne = "Player One", playerTwo = "Machine") {
+function Controller(playerOne = "Player", playerTwo = "Machine") {
   // Cosas inherentes a interaccion
   const board = GameBoard();
 
@@ -149,8 +153,12 @@ function Controller(playerOne = "Player One", playerTwo = "Machine") {
     // Coloca marcador del jugador
     board.setMark(activePlayer.token, row, column);
 
-    // Revisa si hay ganador y exportalo
-
+    // Revisa si hay empate o ganador y exportalo
+    if (board.checkForWinning() === "draw") {
+      winner = "nadie";
+      console.log("nadie");
+      return;
+    }
     if (board.checkForWinning(activePlayer.token)) {
       board.printBoard();
       // console.log(`Jugador [${activePlayer.name}] gano la partida`);
@@ -240,6 +248,9 @@ function GUI() {
     textDisplay.classList.add("winnerText");
     textDisplay.textContent = `El jugador [${player}] ha ganado esta partida`;
 
+    if (player === "nadie")
+      textDisplay.textContent = "Nadie gana, es un empate.";
+
     winnerContainer.appendChild(textDisplay);
     winnerContainer.appendChild(replayButton);
   };
@@ -266,6 +277,10 @@ function GUI() {
       displayTurno(game.getActivePlayer().name);
       // Chequea si hay un ganador
       if (game.getWinner()) {
+        if (game.getWinner() === "nadie") {
+          displayWinner("nadie");
+          return;
+        }
         const winner = game.getWinner();
         displayWinner(winner.name);
       }
@@ -288,6 +303,10 @@ function newGame() {
   container.appendChild(newboard);
 
   GUI();
+}
+
+function machinePlay(currentBoard, playerMark) {
+  const currentBoardArray = currentBoard.flat();
 }
 
 GUI();
