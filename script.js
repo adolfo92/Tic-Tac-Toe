@@ -275,6 +275,8 @@ function GUI() {
 
       // Cambia el display del jugador activo
       displayTurno(game.getActivePlayer().name);
+      // --------------------------------------------------------------------------Dime como va el position map
+      console.log(machinePlay(game.boardArray()).getValueMap());
       // Chequea si hay un ganador
       if (game.getWinner()) {
         if (game.getWinner() === "nadie") {
@@ -306,7 +308,40 @@ function newGame() {
 }
 
 function machinePlay(currentBoard, playerMark) {
-  const currentBoardArray = currentBoard.flat();
+  let board = currentBoard;
+
+  // Posiciones para ganar
+  const winPositions = [
+    // Rows
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    // Diagonals
+    [1, 5, 9],
+    [3, 5, 7],
+    // columns
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+  ];
+
+  // Mapa para asignar valor del 1 al 9 a cada posicion
+  const positionMap = {};
+  const valueMap = {};
+  let position = 0;
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      position += 1;
+      positionMap[String(position)] = board[i][j];
+      valueMap[String(position)] = board[i][j].getValue();
+    }
+  }
+
+  const getPositionMap = () => positionMap;
+  const getValueMap = () => valueMap;
+
+  return { getPositionMap, getValueMap };
 }
 
 GUI();
