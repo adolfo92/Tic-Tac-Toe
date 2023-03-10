@@ -276,7 +276,8 @@ function GUI() {
       // Cambia el display del jugador activo
       displayTurno(game.getActivePlayer().name);
       // --------------------------------------------------------------------------Dime como va el position map
-      console.log(machinePlay(game.boardArray()).getValueMap());
+      roadScorer(2, game.boardArray(), "O", "X");
+
       // Chequea si hay un ganador
       if (game.getWinner()) {
         if (game.getWinner() === "nadie") {
@@ -307,7 +308,8 @@ function newGame() {
   GUI();
 }
 
-function machinePlay(currentBoard, playerMark) {
+function machineEyes(currentBoard, playerMark) {
+  console.log("machineEyes");
   let board = currentBoard;
 
   // Posiciones para ganar
@@ -340,8 +342,53 @@ function machinePlay(currentBoard, playerMark) {
 
   const getPositionMap = () => positionMap;
   const getValueMap = () => valueMap;
+  const getWinPositions = () => winPositions;
 
-  return { getPositionMap, getValueMap };
+  return { getPositionMap, getValueMap, getWinPositions };
+}
+
+function roadScorer(position, board, machineToken, playerToken) {
+  const currentBoard = machineEyes(board);
+  const currentState = currentBoard.getValueMap();
+  const boardValues = currentBoard.getPositionMap();
+
+  const possibleRoads = currentBoard
+    .getWinPositions()
+    .filter((array) => array.includes(position));
+
+  // Funcion de evaluacion estatica (Meto camino, me escupe score)
+  const evaluator = (road) => {
+    let result = 0;
+    road.forEach((item) => {
+      let value = currentState[item];
+      if (value === machineToken) result += 1;
+      if (value === playerToken) result -= 1;
+    });
+    console.log("evaluator output: \n" + result + "\n" + road);
+
+    return [result, road];
+  };
+
+  // Funcion de evaluacion de caminos (Meto array de caminos posibles, me escupe cual camino es y su score)
+  let maxEval;
+  const roadChecker = (Eval) => {
+    maxEval = Eval;
+    let bestRoad;
+    possibleRoads.forEach((road) => {
+      let roadScore = evaluator(road)[0];
+
+      if (roadScore > maxEval) {
+        maxEval = roadScore;
+        bestRoad = road;
+      }
+    });
+    console.log(
+      `road checker output: \nBest score: ${maxEval} \nOn road: ${bestRoad} `
+    );
+    return [maxEval, road];
+  };
+
+  console.log(roadChecker(-Infinity));
 }
 
 GUI();
