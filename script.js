@@ -26,7 +26,7 @@ function GameBoard() {
       row.forEach((column) => {
         rowValues.push(column.getValue());
       });
-      // console.log(rowValues);
+      console.log(rowValues);
     });
   };
 
@@ -262,6 +262,11 @@ function GUI() {
   };
 
   displayTurno(game.getActivePlayer().name);
+  if (game.getActivePlayer().name !== "Player") {
+    console.log("in");
+    machinePlays(game.boardArray()).setValue(game.getActivePlayer().token);
+    detonaCelda().marcaCelda();
+  }
 
   celdas.forEach((celda) =>
     celda.addEventListener("click", () => {
@@ -276,7 +281,14 @@ function GUI() {
       // Cambia el display del jugador activo
       displayTurno(game.getActivePlayer().name);
       // --------------------------------------------------------------------------Dime como va el position map
-      roadScorer(2, game.boardArray(), "O", "X");
+      // roadScorer(2, game.boardArray(), "O", "X");
+
+      if (game.getActivePlayer().name !== "Player") {
+        console.log("in");
+        machinePlays(game.boardArray()).setValue(game.getActivePlayer().token);
+        detonaCelda(celda).marcaCelda();
+        game.getBoard();
+      }
 
       // Chequea si hay un ganador
       if (game.getWinner()) {
@@ -308,6 +320,25 @@ function newGame() {
   GUI();
 }
 
+function machinePlays(board) {
+  let boardEmptys = [];
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; i < 3; i++) {
+      if (board[i][j].getValue() === "") {
+        boardEmptys.push(board[i][j]);
+      }
+    }
+  }
+
+  let randomPosition = Math.round(Math.random() * boardEmptys.length - 1);
+
+  return boardEmptys[randomPosition];
+}
+
+GUI();
+
+/*
+// ------------------------------------------------------------Zona de IA
 function machineEyes(currentBoard, playerMark) {
   console.log("machineEyes");
   let board = currentBoard;
@@ -371,9 +402,12 @@ function roadScorer(position, board, machineToken, playerToken) {
 
   // Funcion de evaluacion de caminos (Meto array de caminos posibles, me escupe cual camino es y su score)
   let maxEval;
-  const roadChecker = (Eval) => {
-    maxEval = Eval;
+  let minEval;
+  const roadChecker = (EvalMax, EvalMin) => {
+    maxEval = EvalMax;
+    minEval = EvalMin;
     let bestRoad;
+    let worstRoad;
     possibleRoads.forEach((road) => {
       let roadScore = evaluator(road)[0];
 
@@ -381,14 +415,22 @@ function roadScorer(position, board, machineToken, playerToken) {
         maxEval = roadScore;
         bestRoad = road;
       }
+
+      if (roadScore < minEval) {
+        minEval = roadScore;
+        worstRoad = road;
+      }
     });
     console.log(
-      `road checker output: \nBest score: ${maxEval} \nOn road: ${bestRoad} `
+      `road checker output: \nBest score: ${maxEval} \nOn road: ${bestRoad}\n\nWorst score: ${minEval}\nOn road: ${worstRoad} `
     );
-    return [maxEval, road];
+    return [maxEval, bestRoad, minEval, worstRoad];
   };
 
-  console.log(roadChecker(-Infinity));
+  console.log(roadChecker(-Infinity, Infinity));
+
+  return { roadChecker };
 }
 
-GUI();
+
+*/
