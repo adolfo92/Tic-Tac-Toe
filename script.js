@@ -82,7 +82,9 @@ function GameBoard() {
 
     // Tabla llena empate
     const arrayDeTabla = board.flat();
-    if (arrayDeTabla.every((cell) => cell.getValue() !== "")) return "draw";
+    if (arrayDeTabla.every((cell) => cell.getValue() !== "") && win === false) {
+      return "draw";
+    }
 
     return win;
   };
@@ -268,6 +270,17 @@ function GUI() {
     detonaCelda().marcaCelda();
   }
 
+  const winCheck = () => {
+    if (game.getWinner()) {
+      if (game.getWinner() === "nadie") {
+        displayWinner("nadie");
+        return;
+      }
+      const winner = game.getWinner();
+      displayWinner(winner.name);
+    }
+  };
+
   celdas.forEach((celda) =>
     celda.addEventListener("click", () => {
       // Juega ronda
@@ -280,25 +293,14 @@ function GUI() {
 
       // Cambia el display del jugador activo
       displayTurno(game.getActivePlayer().name);
-      // --------------------------------------------------------------------------Dime como va el position map
-      // roadScorer(2, game.boardArray(), "O", "X");
 
-      if (game.getActivePlayer().name !== "Player") {
-        console.log("in");
-        machinePlays(game.boardArray()).setValue(game.getActivePlayer().token);
-        detonaCelda(celda).marcaCelda();
-        game.getBoard();
+      //Turno de maquina
+      if (game.getActivePlayer().name === "Machine") {
+        if (machinePlays() !== undefined) machinePlays().click();
       }
 
       // Chequea si hay un ganador
-      if (game.getWinner()) {
-        if (game.getWinner() === "nadie") {
-          displayWinner("nadie");
-          return;
-        }
-        const winner = game.getWinner();
-        displayWinner(winner.name);
-      }
+      winCheck();
     })
   );
 }
@@ -320,19 +322,29 @@ function newGame() {
   GUI();
 }
 
-function machinePlays(board) {
+function machinePlays() {
+  let celdas = document.querySelectorAll(".cell");
+
   let boardEmptys = [];
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; i < 3; i++) {
-      if (board[i][j].getValue() === "") {
-        boardEmptys.push(board[i][j]);
-      }
+
+  for (let i = 0; i < celdas.length; i++) {
+    if (celdas[i].textContent === "") {
+      boardEmptys.push(celdas[i]);
     }
   }
 
-  let randomPosition = Math.round(Math.random() * boardEmptys.length - 1);
+  if (boardEmptys.length === 1) return boardEmptys[0];
 
-  return boardEmptys[randomPosition];
+  let randomPosition = Math.abs(
+    Math.round(Math.random() * boardEmptys.length - 1)
+  );
+
+  let randomCell = boardEmptys[randomPosition];
+
+  console.log(randomCell);
+  console.log(randomPosition);
+
+  return randomCell;
 }
 
 GUI();
