@@ -26,7 +26,7 @@ function GameBoard() {
       row.forEach((column) => {
         rowValues.push(column.getValue());
       });
-      console.log(rowValues);
+      //console.log(rowValues);
     });
   };
 
@@ -162,7 +162,7 @@ function Controller(playerOne = "Player", playerTwo = "Machine") {
       return;
     }
     if (board.checkForWinning(activePlayer.token)) {
-      board.printBoard();
+      //board.printBoard();
       // console.log(`Jugador [${activePlayer.name}] gano la partida`);
       winner = activePlayer;
       return;
@@ -182,6 +182,7 @@ function Controller(playerOne = "Player", playerTwo = "Machine") {
     getWinner,
     getBoard: board.printBoard,
     boardArray: board.getBoard,
+    switchTurn,
   };
 }
 
@@ -274,10 +275,12 @@ function GUI() {
     if (game.getWinner()) {
       if (game.getWinner() === "nadie") {
         displayWinner("nadie");
-        return;
+        return 1;
       }
       const winner = game.getWinner();
       displayWinner(winner.name);
+      game.switchTurn();
+      return 1;
     }
   };
 
@@ -295,8 +298,15 @@ function GUI() {
       displayTurno(game.getActivePlayer().name);
 
       //Turno de maquina
-      if (game.getActivePlayer().name === "Machine") {
+      if (
+        game.getActivePlayer().name === "Machine" &&
+        game.getWinner() === undefined
+      ) {
         if (machinePlays() !== undefined) machinePlays().click();
+
+        // Aca verifico que mi recursividad no me haya generado un ganador
+
+        if (game.getWinner()) return;
       }
 
       // Chequea si hay un ganador
@@ -340,9 +350,6 @@ function machinePlays() {
   );
 
   let randomCell = boardEmptys[randomPosition];
-
-  console.log(randomCell);
-  console.log(randomPosition);
 
   return randomCell;
 }
