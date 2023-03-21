@@ -284,6 +284,7 @@ function GUI() {
     }
   };
 
+  // ----------- Disparador del evento de juego usando el click
   celdas.forEach((celda) =>
     celda.addEventListener("click", () => {
       // Juega ronda
@@ -297,15 +298,17 @@ function GUI() {
       // Cambia el display del jugador activo
       displayTurno(game.getActivePlayer().name);
 
+      console.table(positionMapper(game.boardArray()));
+
       //Turno de maquina
       if (
         game.getActivePlayer().name === "Machine" &&
         game.getWinner() === undefined
       ) {
-        if (machinePlays() !== undefined) machinePlays().click();
+        let machineSelected = machinePlays();
+        if (machineSelected !== undefined) machineSelected.click();
 
         // Aca verifico que mi recursividad no me haya generado un ganador
-
         if (game.getWinner()) return;
       }
 
@@ -332,26 +335,53 @@ function newGame() {
   GUI();
 }
 
-function machinePlays() {
-  let celdas = document.querySelectorAll(".cell");
+function positionMapper(BoardArray, positionIndex) {
+  let positionMap = {};
+  let position = 0;
 
-  let boardEmptys = [];
-
-  for (let i = 0; i < celdas.length; i++) {
-    if (celdas[i].textContent === "") {
-      boardEmptys.push(celdas[i]);
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      positionMap[String(position)] = BoardArray[i][j];
+      position++;
     }
   }
 
-  if (boardEmptys.length === 1) return boardEmptys[0];
+  if (positionIndex) return positionMap.positionIndex;
 
-  let randomPosition = Math.abs(
-    Math.round(Math.random() * boardEmptys.length - 1)
-  );
+  return positionMap;
+}
 
-  let randomCell = boardEmptys[randomPosition];
+function machinePlays(difficulty) {
+  if (!difficulty) {
+    let celdas = document.querySelectorAll(".cell");
 
-  return randomCell;
+    let boardEmptys = [];
+
+    for (let i = 0; i < celdas.length; i++) {
+      if (celdas[i].textContent === "") {
+        boardEmptys.push(celdas[i]);
+      }
+    }
+
+    if (boardEmptys.length === 1) return boardEmptys[0];
+
+    let randomPosition = Math.abs(
+      Math.round(Math.random() * boardEmptys.length - 1)
+    );
+
+    let randomCell = boardEmptys[randomPosition];
+    let arrayPosition = { row: 0, column: 0 };
+    let cellClass = randomCell.className.split(" ");
+    cellClass.forEach((Class) => {
+      const splittedClass = Class.split("-");
+      if (splittedClass[0] === "row") arrayPosition.row = splittedClass[1];
+      if (splittedClass[0] === "column")
+        arrayPosition.column = splittedClass[1];
+    });
+    console.log(arrayPosition);
+
+    return randomCell;
+  }
 }
 
 GUI();
