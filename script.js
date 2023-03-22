@@ -335,6 +335,7 @@ function newGame() {
   GUI();
 }
 
+//---- Esta funcion me da la posicion asociada al array interno
 function positionMapper(BoardArray, positionIndex) {
   let positionMap = {};
   let position = 0;
@@ -352,9 +353,9 @@ function positionMapper(BoardArray, positionIndex) {
 }
 
 function machinePlays(difficulty) {
-  if (!difficulty) {
-    let celdas = document.querySelectorAll(".cell");
+  let celdas = document.querySelectorAll(".cell");
 
+  if (!difficulty) {
     let boardEmptys = [];
 
     for (let i = 0; i < celdas.length; i++) {
@@ -370,18 +371,18 @@ function machinePlays(difficulty) {
     );
 
     let randomCell = boardEmptys[randomPosition];
-    let arrayPosition = { row: 0, column: 0 };
-    let cellClass = randomCell.className.split(" ");
-    cellClass.forEach((Class) => {
-      const splittedClass = Class.split("-");
-      if (splittedClass[0] === "row") arrayPosition.row = splittedClass[1];
-      if (splittedClass[0] === "column")
-        arrayPosition.column = splittedClass[1];
-    });
-    console.log(arrayPosition);
 
     return randomCell;
   }
+
+  //---------- Asocia posicion con array de celdas en el front
+
+  let arrayPositions = {};
+
+  for (let i = 0; i < 9; i++) {
+    arrayPositions[String(i)] = celdas[i];
+  }
+  console.log(arrayPositions);
 }
 
 GUI();
